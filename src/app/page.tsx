@@ -1,7 +1,41 @@
+import "server-only";
+
 import Image from "next/image";
 import styles from "./page.module.css";
 
-export default function Home() {
+import { cache } from "react";
+
+const fetchResultFabric = cache(async (URL: string) => {
+  return fetch(URL, {
+    method: "GET",
+    cache: 'no-store'
+    // cache: "reload",
+    // cache:'force-cache',
+    // next: {
+    //   revalidate: 1,
+    // },
+  });
+})
+
+async function fetchTopFive() {
+  const URL = `https://api.restful-api.dev/objects`;
+  try {
+
+
+    const fetchResult = fetchResultFabric(URL);
+    const response = await fetchResult;
+    if (response.ok) {
+      const jsonData = await response.json();
+    } else {
+    }
+  } catch (e) {}
+}
+export default async function Home() {
+  await fetchTopFive();
+  await fetchTopFive();
+  await fetchTopFive();
+  await fetchTopFive();
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -93,3 +127,5 @@ export default function Home() {
     </div>
   );
 }
+
+export const dynamic = "force-dynamic";
