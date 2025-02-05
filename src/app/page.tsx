@@ -3,19 +3,26 @@ import "server-only";
 import Image from "next/image";
 import styles from "./page.module.css";
 
-import { cache } from "react";
+// import { cache } from "react";
+import { after } from "next/server";
+import { revalidateTag } from "next/cache";
 
-const fetchResultFabric = cache(async (URL: string) => {
+const fetchResultFabric = async (URL: string) => {
   return fetch(URL, {
     method: "GET",
-    cache: 'no-store'
+    // cache: 'force-cache',
+    next: {
+      revalidate: 0.0000001,
+      // tags: ['all']
+    },
+    // headers: {},
     // cache: "reload",
     // cache:'force-cache',
     // next: {
     //   revalidate: 1,
     // },
   });
-})
+}
 
 async function fetchTopFive() {
   const URL = `https://api.restful-api.dev/objects`;
@@ -31,6 +38,9 @@ async function fetchTopFive() {
   } catch (e) {}
 }
 export default async function Home() {
+  // unstable_after(() => {
+  //   revalidateTag('all')
+  // })
   await fetchTopFive();
   await fetchTopFive();
   await fetchTopFive();

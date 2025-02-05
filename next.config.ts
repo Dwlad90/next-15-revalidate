@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       fullUrl: true,
     },
   },
+  experimental: {
+    after: true,
+  },
 };
 
 export default nextConfig;
